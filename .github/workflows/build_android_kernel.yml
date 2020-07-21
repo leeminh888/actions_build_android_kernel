@@ -16,9 +16,7 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-       - name: Checkout
-         uses: actions/checkout@master
-       
+      
        - name: Clean Up
          run: |
            docker rmi `docker images -q`
@@ -32,14 +30,23 @@ jobs:
          run: |
             sudo -E apt-get -qq update
             sudo apt-get install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
-       
+
+       - name: Clone Build ToolChain
+         run: |
+            cd ~
+            git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git Toolchain
+         
        - name: Clone Kernel Source Code
-         run: git clone $KERNEL_SOURCE_URL -b $KERNEL_SOURCE_BRANCH Kernel
+         run: |
+            cd ~
+            git clone $KERNEL_SOURCE_URL -b $KERNEL_SOURCE_BRANCH Kernel
        
        - name: Make Kernel
          run: |
-            cd Kernel
+            cd ~/Kernel
             export ARCH=arm64
+            export SUBARCH=arm64
             export CROSS_COMPILE=aarch64-linux-android-
+            export PATH=~/Toolchain/bin
             make $DEFCONFIG_NAME
             make
