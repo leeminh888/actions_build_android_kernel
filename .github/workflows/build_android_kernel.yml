@@ -31,7 +31,7 @@ jobs:
        - name: Initialization environment
          run: |
             sudo -E apt-get -qq update
-            sudo apt-get install -y cpio liblz4-dev zipalign p7zip fakeroot liblz4-tool liblz4-1 gcc make bc curl git zip zstd flex libc6 libstdc++6 libgnutls30 ccache gcc-aarch64-linux gnu gcc-arm-linux-gnueabi
+            sudo apt-get install -y build-essential cpio liblz4-dev zipalign p7zip fakeroot gcc make bc curl git zip
       
        - name: Clone Build ToolChain
          run: |
