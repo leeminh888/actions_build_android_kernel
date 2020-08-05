@@ -5,9 +5,9 @@ on:
     types: [started]
     
 env:
-  KERNEL_SOURCE_URL: https://github.com/MiCode/Xiaomi_Kernel_OpenSource/
-  KERNEL_SOURCE_BRANCH: dipper-q-oss
-  DEFCONFIG_NAME: dipper_user_defconfig
+  KERNEL_SOURCE_URL: https://github.com/leeminh888/android_kernel_xiaomi_sm7250
+  KERNEL_SOURCE_BRANCH: picasso-q-oss
+  DEFCONFIG_NAME: picasso_user_defconfig
   TZ: Asia/Shanghai
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
 
     steps:
        - name: Checkout
-         uses: actions/checkout@master
+         uses: actions/checkout@v2
          
        - name: Clean Up
          run: |
@@ -35,7 +35,11 @@ jobs:
       
        - name: Clone Build ToolChain
          run: |
-            git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git Toolchain
+            mkdir -p $GITHUB_WORKSPACE/TC
+            cd $GITHUB_WORKSPACE/TC
+            wget 'https://github.com/kdrag0n/proton-clang-build/releases/download/20200117/proton_clang-11.0.0-20200117.tar.zst'
+            tar -I zstd -xf proton_clang-11.0.0-20200117.tar.zst
+            mv proton_clang-11.0.0-20200117/* ./
          
        - name: Clone Kernel Source Code
          run: |
@@ -43,10 +47,22 @@ jobs:
        
        - name: Make Kernel
          run: |
-            cd Kernel
-            export ARCH=arm64
-            export SUBARCH=arm64
-            export CROSS_COMPILE=aarch64-linux-android-
-            export PATH=../Toolchain/bin
-            make $DEFCONFIG_NAME
-            make
+            cd $GITHUB_WORKSPACE/kernel
+            args="-j$(nproc --all) \
+              O=out \
+              ARCH=arm64 \
+              CLANG_TRIPLE=aarch64-linux-gnu- \
+              DTC_EXT=dtc \
+              CROSS_COMPILE=$GITHUB_WORKSPACE/TC/bin/aarch64-linux-gnu- \
+              CC=/home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
+       
+        -  name: Make defconfig        
+           run: |   
+            make ${args} picasso_user_defconfig
+            make ${args}  CC='ccache /home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang'
+
+      - name : Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          path: kernel/out/arch/arm64/boot/
+          name: out-boot-folder
