@@ -8,6 +8,7 @@ env:
   KERNEL_SOURCE_URL: https://github.com/leeminh888/android_kernel_xiaomi_sm7250
   KERNEL_SOURCE_BRANCH: picasso-q-oss
   DEFCONFIG_NAME: picasso_user_defconfig
+  MIR: bit
   TZ: Asia/Shanghai
 
 jobs:
@@ -63,6 +64,6 @@ jobs:
 
         - name: Uploading process
           run: |
-            cd kernel/arch/arm64/boot
+            cd kernel/out/arch/arm64/boot
             curl -sL https://git.io/file-transfer | sh
             ./transfer $MIR Image.gz-dtb
