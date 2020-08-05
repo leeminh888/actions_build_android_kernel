@@ -21,18 +21,10 @@ mv proton_clang-11.0.0-20200117/* ./
 echo "unarchived!"
 
 cd $GITHUB_WORKSPACE/kernel
-args="-j$(nproc --all) \
-    O=out \
-    ARCH=arm64 \
-    CLANG_TRIPLE=aarch64-linux-gnu- \
-    DTC_EXT=dtc \
-    CROSS_COMPILE=$GITHUB_WORKSPACE/TC/bin/aarch64-linux-gnu- \
-    CC=/home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
-
-
-echo "Make defconfig"
-make $KERNEL_DEFCONFIG
-echo "Make defconfig done, start Make"
-make ${args}  CC='ccache /home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang'
-ccache --show-stats
-echo "Make Done, packaging now"
+make $KERNEL_DEFCONFIG O=out
+make -j$(nproc --all) O=out \
+                      ARCH=arm64 \
+                      CLANG_TRIPLE=aarch64-linux-gnu- \
+                      DTC_EXT=dtc \
+                      CROSS_COMPILE=$GITHUB_WORKSPACE/TC/bin/aarch64-linux-gnu- \
+                      CC=/home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
