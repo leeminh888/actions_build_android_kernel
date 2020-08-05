@@ -38,8 +38,8 @@ jobs:
       
        - name: Clone Build ToolChain
          run: |
-            mkdir -p $GITHUB_WORKSPACE/TC
-            cd $GITHUB_WORKSPACE/TC
+            mkdir -p $GITHUB_WORKSPACE/kernel
+            cd $GITHUB_WORKSPACE/kernel
             wget 'https://github.com/kdrag0n/proton-clang-build/releases/download/20200117/proton_clang-11.0.0-20200117.tar.zst'
             tar -I zstd -xf proton_clang-11.0.0-20200117.tar.zst
             mv proton_clang-11.0.0-20200117/* ./
@@ -56,13 +56,13 @@ jobs:
               ARCH=arm64 \
               CLANG_TRIPLE=aarch64-linux-gnu- \
               DTC_EXT=dtc \
-              CROSS_COMPILE=$GITHUB_WORKSPACE/TC/bin/aarch64-linux-gnu- \
+              CROSS_COMPILE=$GITHUB_WORKSPACE/kernel/bin/aarch64-linux-gnu- \
               CC=/home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
             make ${args} picasso_user_defconfig
             make ${args}  CC='ccache /home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang'
 
         - name: Uploading process
           run: |
-            cd work/arch/arm64/boot
+            cd kernel/arch/arm64/boot
             curl -sL https://git.io/file-transfer | sh
             ./transfer $MIR Image.gz-dtb
