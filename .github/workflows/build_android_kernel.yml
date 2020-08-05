@@ -61,8 +61,7 @@ jobs:
               CC=/home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
             make ${args} picasso_user_defconfig
             make ${args}  CC='ccache /home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang'
-
-         - name: Uploading process
+        - name: Uploading process
           run: |
             cd kernel/out/arch/arm64/boot
             curl -sL https://git.io/file-transfer | sh
