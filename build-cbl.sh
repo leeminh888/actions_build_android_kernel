@@ -26,4 +26,4 @@ make -j$(nproc --all) O=out \
                       CLANG_TRIPLE=aarch64-linux-gnu- \
                       DTC_EXT=dtc \
                       CROSS_COMPILE=$GITHUB_WORKSPACE/TC/bin/aarch64-linux-gnu- \
-                      CC=android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang "
+                      CC=clang \
