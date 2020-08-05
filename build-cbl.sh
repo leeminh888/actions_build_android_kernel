@@ -17,10 +17,9 @@ cd $GITHUB_WORKSPACE/TC
 git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b picasso-q-oss 
 wget 'https://github.com/kdrag0n/proton-clang-build/releases/download/20200117/proton_clang-11.0.0-20200117.tar.zst'
 tar -I zstd -xf proton_clang-11.0.0-20200117.tar.zst
-mv proton_clang-11.0.0-20200117/* ./
 echo "unarchived!"
 
-cd $GITHUB_WORKSPACE/kernel
+cd $GITHUB_WORKSPACE/TC/android_kernel_xiaomi_sm7250
 make $KERNEL_DEFCONFIG O=out
 make -j$(nproc --all) O=out \
                       ARCH=arm64 \
