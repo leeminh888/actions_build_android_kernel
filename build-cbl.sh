@@ -13,10 +13,10 @@ ccache -M 4G
 ##ccache --show-stats
 mkdir -p $GITHUB_WORKSPACE/TC
 cd $GITHUB_WORKSPACE/TC
+git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b picasso-q-oss 
 wget 'https://github.com/kdrag0n/proton-clang-build/releases/download/20200117/proton_clang-11.0.0-20200117.tar.zst'
 tar -I zstd -xf proton_clang-11.0.0-20200117.tar.zst
 mv proton_clang-11.0.0-20200117/* ./
-git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b picasso-q-oss 
 echo "unarchived!"
 
 cd $GITHUB_WORKSPACE/kernel
