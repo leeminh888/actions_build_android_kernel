@@ -1,4 +1,5 @@
 #!/bin/bash
+KERNEL_DEFCONFIG=picasso_user_defconfig
 set -euo pipefail
 
 echo "deb http://archive.ubuntu.com/ubuntu eoan main" | sudo tee /etc/apt/sources.list
@@ -30,7 +31,7 @@ args="-j$(nproc --all) \
 
 
 echo "Make defconfig"
-make ${args} picasso_user_defconfig
+make $KERNEL_DEFCONFIG
 echo "Make defconfig done, start Make"
 make ${args}  CC='ccache /home/runner/work/android_kernel_xiaomi_sm7250/android_kernel_xiaomi_sm7250/TC/bin/clang'
 ccache --show-stats
